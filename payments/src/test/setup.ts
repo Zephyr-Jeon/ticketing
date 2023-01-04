@@ -1,16 +1,14 @@
+import jwt from 'jsonwebtoken';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import request from 'supertest';
-import { app } from '../app';
-import jwt from 'jsonwebtoken';
 
 declare global {
   var signin: (id?: string) => string[];
 }
 
 jest.mock('../nats-wrapper');
-
-process.env.STRIPE_KEY = 'sk_test_your_key';
+jest.mock('../stripe');
+// process.env.STRIPE_KEY = 'sk_test_your_key';
 
 let mongo: any;
 beforeAll(async () => {
