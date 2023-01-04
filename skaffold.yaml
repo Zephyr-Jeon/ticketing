@@ -1,0 +1,58 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/* # all the config file to load into the cluster
+build:
+  local:
+    push: false # do not push to Docker Hub
+  artifacts: # all the things to be built
+    - image: zephyrjeon/ticketing-auth
+      context: auth # folder containing all the code for the above image
+      docker:
+        dockerfile: Dockerfile
+      sync: # tells skaffold how to handle any files that change
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: zephyrjeon/ticketing-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+    - image: zephyrjeon/ticketing-tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: zephyrjeon/ticketing-orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: zephyrjeon/ticketing-expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: zephyrjeon/ticketing-payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
